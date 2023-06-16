@@ -22,6 +22,7 @@
   "author": "hyrious <hyrious@outlook.com>",
   "license": "MIT",
   "scripts": {
+    "prepare": "npm run build",
     "build": "npm run build:js && npm run build:type",
     "build:js": "esbuild index.ts --bundle --external:esbuild --external:cjs-module-lexer --sourcemap --sources-content=false --outfile=index.js --platform=node --target=node14",
     "build:type": "esbuild-dev build-type.ts",

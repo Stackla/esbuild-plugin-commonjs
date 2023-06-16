@@ -10,6 +10,8 @@ export interface CommonJSOptions {
    * @default /\.c?js$/
    */
   filter?: RegExp;
+  // whether to process a certain path
+  match?: (path: string) => boolean;
 
   /**
    * _Experimental_: Transform commonjs to es modules. You have to install
@@ -82,6 +84,7 @@ export interface TransformConfig {
 
 export function commonjs({
   filter = /\.c?js$/,
+  match,
   transform = false,
   transformConfig,
 }: CommonJSOptions = {}): Plugin {
@@ -99,6 +102,9 @@ export function commonjs({
       const lexer = new Lexer();
 
       onLoad({ filter }, async args => {
+        if (match && !match(args.path)) {
+          return null;
+        }
         let parseCJS: typeof import("cjs-module-lexer").parse | undefined;
         if (init_cjs_module_lexer) {
           const { init, parse } = await init_cjs_module_lexer;
